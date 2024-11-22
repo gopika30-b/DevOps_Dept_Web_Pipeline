@@ -1,0 +1,32 @@
+trigger:
+- main  # Trigger pipeline on changes to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Use a Linux agent
+
+steps:
+# Step 1: Install Node.js (optional if you're using any JS build tools)
+- task: UseNode@2
+  inputs:
+    versionSpec: '16.x'  # Node.js version (if needed)
+    addToPath: true
+
+# Step 2: Copy HTML and CSS files to the staging directory
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'  # Source folder (root of your repo)
+    Contents: '**/*.html, **/*.css'  # Include HTML and CSS files
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'  # Stage the files for deployment
+
+# Step 3: Publish the build artifacts (HTML and CSS)
+- task: PublishBuildArtifacts@1
+  inputs:
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'  # Staging directory to publish
+    artifactName: 'drop'  # Artifact name for deployment
+
+# Step 4: Deploy the website to an Azure Web App
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'your-azure-subscription'  # Your Azure subscription (configured in Azure DevOps)
+    appName: 'your-webapp-name'  # The name of your Azure Web App
+    package: '$(Build.ArtifactStagingDirectory)/drop'  # Path to the published artifacts
