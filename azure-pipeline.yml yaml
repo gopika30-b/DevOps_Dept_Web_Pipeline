@@ -6,7 +6,7 @@ pool:
 
 steps:
 # Step 1: Install Node.js (optional if you're using any JS build tools)
-- task: UseNode@2
+- task: UseNode@1  # Changed to UseNode@1
   inputs:
     versionSpec: '16.x'  # Node.js version (if needed)
     addToPath: true
