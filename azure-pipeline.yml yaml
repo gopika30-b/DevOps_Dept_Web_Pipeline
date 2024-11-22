@@ -15,9 +15,3 @@ steps:
   inputs:
     publishDirectory: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'drop' 
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'your-azure-subscription'
-    appName: 'CSE-CitChennai'
-    package: '$(Build.ArtifactStagingDirectory)/drop'
